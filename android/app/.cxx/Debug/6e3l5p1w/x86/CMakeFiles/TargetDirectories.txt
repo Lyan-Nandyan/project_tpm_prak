@@ -1,2 +1,0 @@
-C:/Users/ad/OneDrive/Dokumen/ad/semester 6/prak teknologi dan pemrograman mobile/project_tpm_prak/android/app/.cxx/Debug/6e3l5p1w/x86/CMakeFiles/edit_cache.dir
-C:/Users/ad/OneDrive/Dokumen/ad/semester 6/prak teknologi dan pemrograman mobile/project_tpm_prak/android/app/.cxx/Debug/6e3l5p1w/x86/CMakeFiles/rebuild_cache.dir
