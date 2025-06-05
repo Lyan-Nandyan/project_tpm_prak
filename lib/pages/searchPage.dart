@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:project_tpm_prak/detail.dart';
+import 'package:project_tpm_prak/pages/detail.dart';
 import 'package:project_tpm_prak/models/movie.dart';
 import 'package:project_tpm_prak/services/api_service.dart';
 

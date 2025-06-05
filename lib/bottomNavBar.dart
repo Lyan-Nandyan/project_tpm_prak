@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
-import 'favoritePage.dart';
-import 'map_page.dart';
-import 'profile.dart';
+import 'pages/home.dart';
+import 'pages/favoritePage.dart';
+import 'pages/map_page.dart';
+import 'pages/profile.dart';
 
 class BottomNavbar extends StatefulWidget {
   const BottomNavbar({super.key});

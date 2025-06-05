@@ -1,9 +1,10 @@
+// lib/pages/home_page.dart
 import 'package:flutter/material.dart';
-import 'package:project_tpm_prak/detail.dart';
-import 'package:project_tpm_prak/models/movie.dart';
-import 'package:project_tpm_prak/searchPage.dart';
-import 'package:project_tpm_prak/services/api_service.dart';
-import 'dart:math';
+import 'package:project_tpm_prak/pages/detail.dart'; //
+import 'package:project_tpm_prak/models/movie.dart'; //
+import 'package:project_tpm_prak/services/api_service.dart'; //
+import 'package:project_tpm_prak/widgets/movie_carousel_banner.dart'; // Import widget baru
+import 'package:project_tpm_prak/widgets/search_bar_widget.dart'; // Import widget baru
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -13,164 +14,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final PageController _pageController = PageController(viewportFraction: 0.85);
-
   Future<List<Movie>> fetchAllMovies() async {
-    final rawList = await ApiService.fetchMovies('');
-    return rawList.map((e) => Movie.fromJson(e)).toList();
+    final rawList = await ApiService.fetchMovies(''); //
+    return rawList.map((e) => Movie.fromJson(e)).toList(); //
   }
 
-  Future<List<Movie>> fetchFeaturedMovies() async {
-    final rawList = await ApiService.fetchMovies('');
-    return rawList.map((e) => Movie.fromJson(e)).take(5).toList();
-  }
-
-  Future<List<Movie>> _fetchRandomFeaturedMovies() async {
-    try {
-      final rawList = await ApiService.fetchMovies('');
-      final allMovies = rawList.map((e) => Movie.fromJson(e)).toList();
-      allMovies.shuffle(Random());
-      return allMovies.take(5).toList();
-    } catch (e) {
-      debugPrint('Error loading random featured movies: $e');
-      return [];
-    }
-  }
-
-  Widget _carouselBanner() {
-    return FutureBuilder<List<Movie>>(
-      future: _fetchRandomFeaturedMovies(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return SizedBox(
-            height: 180,
-            child: Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return const SizedBox(
-              height: 180,
-              child: Center(
-                  child: Text("Gagal memuat film unggulan.",
-                      style: TextStyle(color: Colors.red))));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const SizedBox(
-              height: 180,
-              child: Center(
-                  child: Text("Tidak ada film unggulan ditemukan.",
-                      style: TextStyle(color: Colors.white))));
-        }
-
-        final featuredMovies = snapshot.data!;
-        return SizedBox(
-          height: 180,
-          child: PageView.builder(
-            controller: _pageController,
-            itemCount: featuredMovies.length,
-            itemBuilder: (context, index) {
-              final movie = featuredMovies[index];
-              return AnimatedBuilder(
-                animation: _pageController,
-                builder: (context, child) {
-                  double value = 1.0;
-                  try {
-                    if (_pageController.hasClients &&
-                        _pageController.position.haveDimensions) {
-                      value = (_pageController.page! - index).abs();
-                      value = (1 - (value * 0.3)).clamp(0.0, 1.0);
-                    }
-                  } catch (_) {}
-
-                  return Center(
-                    child: Transform.scale(
-                      scale: value,
-                      child: child,
-                    ),
-                  );
-                },
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => Detail(id: movie.id),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black26,
-                          blurRadius: 6,
-                          offset: const Offset(0, 4),
-                        )
-                      ],
-                      image: DecorationImage(
-                        image: NetworkImage(movie.posterUrl),
-                        fit: BoxFit.cover,
-                        // Tambahkan errorBuilder untuk gambar yang gagal dimuat
-                        onError: (exception, stackTrace) {
-                          debugPrint('Error loading image: $exception');
-                        },
-                      ),
-                    ),
-                    alignment: Alignment.bottomLeft,
-                    child: Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(8),
-                      decoration: const BoxDecoration(
-                        borderRadius:
-                            BorderRadius.vertical(bottom: Radius.circular(12)),
-                        color: Colors
-                            .black45, // Transparansi untuk teks di atas gambar
-                      ),
-                      child: Text(
-                        movie.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _searchBar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-      child: TextField(
-        readOnly: true,
-        decoration: InputDecoration(
-          hintText: 'Search title movies...',
-          filled: true,
-          fillColor: Colors.white.withOpacity(0.1),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide.none,
-          ),
-          prefixIcon: const Icon(Icons.search, color: Colors.white),
-        ),
-        style: const TextStyle(color: Colors.white),
-        onTap: () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const Searchpage())),
-      ),
-    );
-  }
-
+  // Pertahankan _durationBadge di sini karena tidak dipisah
   Widget _durationBadge(int duration) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
@@ -199,6 +48,7 @@ class _HomeState extends State<Home> {
     );
   }
 
+  // Pertahankan _ratingBadge di sini karena tidak dipisah
   Widget _ratingBadge(double rating) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
@@ -246,7 +96,7 @@ class _HomeState extends State<Home> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: _searchBar(),
+              child: SearchBarWidget(), // Gunakan widget SearchBarWidget
             ),
             Expanded(
               child: CustomScrollView(
@@ -263,7 +113,9 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                   ),
-                  SliverToBoxAdapter(child: _carouselBanner()),
+                  SliverToBoxAdapter(
+                      child:
+                          MovieCarouselBanner()), // Gunakan widget MovieCarouselBanner
                   SliverToBoxAdapter(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -313,7 +165,7 @@ class _HomeState extends State<Home> {
                           sliver: SliverGrid(
                             delegate: SliverChildBuilderDelegate(
                               (context, index) {
-                                final movie = movies[index];
+                                final movie = movies[index]; //
                                 return Material(
                                   color: Colors.transparent,
                                   borderRadius: BorderRadius.circular(9),
@@ -324,7 +176,7 @@ class _HomeState extends State<Home> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              Detail(id: movie.id),
+                                              Detail(id: movie.id), //
                                         ),
                                       );
                                     },
@@ -348,7 +200,7 @@ class _HomeState extends State<Home> {
                                               child: Stack(
                                                 children: [
                                                   Image.network(
-                                                    movie.posterUrl,
+                                                    movie.posterUrl, //
                                                     width: double.infinity,
                                                     height: double.infinity,
                                                     fit: BoxFit.cover,
@@ -367,14 +219,14 @@ class _HomeState extends State<Home> {
                                                   Positioned(
                                                     top: 0,
                                                     left: 0,
-                                                    child: _durationBadge(
-                                                        movie.duration),
+                                                    child: _durationBadge(movie
+                                                        .duration), // Gunakan fungsi lokal
                                                   ),
                                                   Positioned(
                                                     top: 0,
                                                     right: 0,
-                                                    child: _ratingBadge(
-                                                        movie.rating),
+                                                    child: _ratingBadge(movie
+                                                        .rating), // Gunakan fungsi lokal
                                                   ),
                                                 ],
                                               ),
@@ -386,7 +238,7 @@ class _HomeState extends State<Home> {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Text(
-                                                movie.title,
+                                                movie.title, //
                                                 style: const TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.bold,
