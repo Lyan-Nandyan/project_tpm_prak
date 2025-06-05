@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:project_tpm_prak/models/boxes.dart';
@@ -26,26 +25,22 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> _register() async {
-
     if (_formKey.currentState!.validate()) {
       final userBox = Hive.box<User>(HiveBoxes.user);
 
-      // Cek apakah email sudah terdaftar
       if (userBox.containsKey(_emailController.text)) {
+        if (!mounted) return; 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
               content:
                   Text('Email sudah terdaftar. Silakan gunakan email lain.')),
         );
-        return; 
+        return;
       }
-
-      // Buat objek User baru
       final newUser = User(
         name: _nameController.text,
         email: _emailController.text,
-        password: _passwordController
-            .text, 
+        password: _passwordController.text,
       );
 
       await userBox.put(newUser.email, newUser);
@@ -54,8 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Registrasi berhasil! Silakan login.')),
       );
-      Navigator.of(context)
-          .pop(); 
+      Navigator.of(context).pop();
     }
   }
 
@@ -87,21 +81,21 @@ class _RegisterPageState extends State<RegisterPage> {
                     if (value == null || value.isEmpty) {
                       return 'Email tidak boleh kosong';
                     }
-                    if (!value.contains('@') || !value.contains('.')) {
-                      return 'Format email tidak valid';
-                    }
+
                     return null;
                   }),
               const SizedBox(height: 12),
               TextFormField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                    labelText: 'Password', border: OutlineInputBorder()),
-                validator: (value) => (value == null || value.length < 6)
-                    ? 'Password minimal 6 karakter'
-                    : null,
-              ),
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                      labelText: 'Password', border: OutlineInputBorder()),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Password tidak boleh kosong';
+                    }
+                    return null;
+                  }),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _register,

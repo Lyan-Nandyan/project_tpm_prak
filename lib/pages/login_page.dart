@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:project_tpm_prak/bottomNavBar.dart';
@@ -15,7 +14,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>(); 
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -27,17 +26,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _login() async {
-   
     if (_formKey.currentState!.validate()) {
-
       final userBox = Hive.box<User>(HiveBoxes.user);
-  
       final user = userBox.get(_emailController.text);
 
       if (user != null && user.password == _passwordController.text) {
-
         final prefs = await SharedPreferences.getInstance();
- 
         await prefs.setString('userId', user.email);
 
         if (!mounted) return;
@@ -51,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
           (route) => false,
         );
       } else {
-
+        if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Email atau password salah.')),
         );
@@ -78,9 +72,6 @@ class _LoginPageState extends State<LoginPage> {
                   if (value == null || value.isEmpty) {
                     return 'Email tidak boleh kosong';
                   }
-                  if (!value.contains('@')) {
-                    return 'Format email tidak valid';
-                  }
                   return null;
                 },
               ),
@@ -98,8 +89,7 @@ class _LoginPageState extends State<LoginPage> {
               ElevatedButton(
                 onPressed: _login,
                 style: ElevatedButton.styleFrom(
-                  minimumSize:
-                      const Size(double.infinity, 50),
+                  minimumSize: const Size(double.infinity, 50),
                 ),
                 child: const Text('Login'),
               ),

@@ -1,10 +1,9 @@
-// lib/pages/home_page.dart
 import 'package:flutter/material.dart';
-import 'package:project_tpm_prak/pages/detail.dart'; //
-import 'package:project_tpm_prak/models/movie.dart'; //
-import 'package:project_tpm_prak/services/api_service.dart'; //
-import 'package:project_tpm_prak/widgets/movie_carousel_banner.dart'; // Import widget baru
-import 'package:project_tpm_prak/widgets/search_bar_widget.dart'; // Import widget baru
+import 'package:project_tpm_prak/pages/detail.dart';
+import 'package:project_tpm_prak/models/movie.dart';
+import 'package:project_tpm_prak/services/api_service.dart';
+import 'package:project_tpm_prak/widgets/movie_carousel_banner.dart';
+import 'package:project_tpm_prak/widgets/search_bar_widget.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,11 +14,10 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   Future<List<Movie>> fetchAllMovies() async {
-    final rawList = await ApiService.fetchMovies(''); //
-    return rawList.map((e) => Movie.fromJson(e)).toList(); //
+    final rawList = await ApiService.fetchMovies('');
+    return rawList.map((e) => Movie.fromJson(e)).toList();
   }
 
-  // Pertahankan _durationBadge di sini karena tidak dipisah
   Widget _durationBadge(int duration) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 5),
