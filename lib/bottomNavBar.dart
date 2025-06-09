@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
-import 'favoritePage.dart';
-import 'map_page.dart';
-import 'profile.dart';
+import 'pages/home.dart';
+import 'pages/favoritePage.dart';
+import 'pages/map_page.dart';
+import 'pages/profile.dart';
+import 'pages/chatbot_page.dart'; // Import halaman chatbot baru
 
 class BottomNavbar extends StatefulWidget {
   const BottomNavbar({super.key});
@@ -18,6 +19,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
   final List<Widget> _pages = [
     Home(),
     Favoritepage(),
+    ChatbotPage(), // Tambahkan halaman chatbot di sini
     MapPage(),
     Profile(),
   ];
@@ -84,11 +86,15 @@ class _BottomNavbarState extends State<BottomNavbar> {
               label: 'Favorites',
             ),
             BottomNavigationBarItem(
-              icon: _buildIconWithBackground(Icons.map, 2),
+              icon: _buildIconWithBackground(Icons.chat, 2),
+              label: 'Chatbot',
+            ),
+            BottomNavigationBarItem(
+              icon: _buildIconWithBackground(Icons.map, 3),
               label: 'Map',
             ),
             BottomNavigationBarItem(
-              icon: _buildIconWithBackground(Icons.person, 3),
+              icon: _buildIconWithBackground(Icons.person, 4),
               label: 'Profile',
             ),
           ],
